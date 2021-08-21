@@ -1,20 +1,34 @@
+// @ts-ignore
+import {StateI} from "../app";
+
+const DIRECTIONS = ['TOP', 'RIGHT', 'DOWN', 'LEFT'];
+
+type DirectionsI = typeof DIRECTIONS[number];
+
 export class Ant {
-  private position: any;
+  private position: number;
 
-  constructor(state: any) {
+  constructor(state: StateI) {
     this.position = state.nestPosition;
-    state.cellRefs[this.position].classList.add('ant')
+    if (state.refs.cells) {
+      state.refs.cells[this.position].classList.add('ant')
+    }
   }
 
-  move(state: any) {
-    state.cellRefs[this.position].classList.remove('ant')
-    this.position = this.moveToNearby(state);
-    state.cellRefs[this.position].classList.add('ant')
+  move(state: StateI) {
+    const cells = state.refs.cells;
+    const oldPosition: number = this.position;
+    const newPosition: number = this.position = this.moveToNearby(state);
+
+    if (!cells || !oldPosition || !oldPosition) return;
+
+    cells[oldPosition].classList.remove('ant');
+    cells[newPosition].classList.add('ant');
   }
 
-  private moveToNearby(state: any) {
+  private moveToNearby(state: StateI): number {
     const {
-      world: {
+      config: {
         columns,
         rows
       }
@@ -37,13 +51,13 @@ export class Ant {
         return (this.position % columns === 0 )
             ? this.position
             : this.position - 1
+      default:
+        return this.position
     }
   }
 
-  private randomDirection() {
-    const DIRECTIONS = ['TOP', 'RIGHT', 'DOWN', 'LEFT'];
+  private randomDirection(): DirectionsI {
     const randomIndex = Math.floor(Math.random() * DIRECTIONS.length)
-    // console.log('direction', DIRECTIONS[randomIndex])  // TODO remove later
     return DIRECTIONS[randomIndex]
   }
 }

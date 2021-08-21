@@ -1,18 +1,23 @@
-export function changeScent(state: any, type: string) {
+// @ts-ignore
+import {StateI} from "../app";
+
+export function changeScent(state: StateI, type: string) {
   const {
     ants,
     scent: currentScents
   } = state;
 
   let nextScent
+
   switch(type) {
     case 'MARK':
-      ants.forEach((ant: any) => {
-        const scent = currentScents.get(ant.position) || 0;
-        nextScent = notHigher(scent + 15, 100);
-        applyScent(state, ant.position, nextScent)
-      })
-
+      if (ants) {
+        ants.forEach((ant: any) => {
+          const scent = currentScents.get(ant.position) || 0;
+          nextScent = notHigher(scent + 15, 100);
+          applyScent(state, ant.position, nextScent)
+        })
+      }
       break;
     case 'FADE':
       currentScents.forEach((scent: number, position: number) => {
@@ -23,8 +28,10 @@ export function changeScent(state: any, type: string) {
   }
 }
 
-function applyScent(state: any, index: number, nextScent: number) {
-  state.cellRefs[index].setAttribute('style', `--scent: ${nextScent / 100}`);
+function applyScent(state: StateI, index: number, nextScent: number) {
+  if (state.refs.cells) {
+    state.refs.cells[index].setAttribute('style', `--scent: ${nextScent / 100}`);
+  }
   state.scent.set(index, nextScent)
 }
 

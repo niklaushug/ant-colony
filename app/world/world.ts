@@ -1,45 +1,50 @@
 // @ts-ignore
+import {StateI} from "../app";
+// @ts-ignore
 import {changeScent} from '../ant/scent.ts';
 // @ts-ignore
 import {Ant} from '../ant/ant.ts';
 
-export function setUpWorld(state: any) {
+export function setUpWorld(state: StateI) {
   const {
     columns,
     rows
-  } = state.world;
+  } = state.config;
 
-  const worldRef = document.querySelector('.world');
+  const worldRef = state.refs.world = document.querySelector('.world');
 
-  if (worldRef) {
-    worldRef.setAttribute('style', `--columns: ${columns}; --rows: ${rows}`)
+  if (!worldRef) return;
 
-    for (let i = 1; i <= columns * rows; i++ ) {
-      const node = document.createElement('div')
-      node.className = 'cell'
-      worldRef.appendChild(node)
-    }
+  worldRef.setAttribute('style', `--columns: ${columns}; --rows: ${rows}`)
 
-    state.cellRefs = worldRef.querySelectorAll('.cell');
+  for (let i = 1; i <= columns * rows; i++ ) {
+    const node = document.createElement('div')
+    node.className = 'cell'
+    worldRef.appendChild(node)
   }
+
+  state.refs.cells = worldRef.querySelectorAll('.cell');
+
 }
 
-export function populateWorld(state: any) {
+export function populateWorld(state: StateI) {
   const {
-    columns,
-    rows
-  } = state.world;
+    ants,
+    nestPosition,
+    foodPosition,
+    refs: {
+      cells,
+    }
+  } = state;
 
-  const nestPosition = state.nestPosition = getCellNr(columns, rows);
-  const foodPosition = state.foodPosition = getCellNr(columns, rows);
+  if (!cells || !ants) return;
 
-  state.cellRefs[nestPosition].classList.add('nest');
-  state.cellRefs[foodPosition].classList.add('food');
+  cells[nestPosition].classList.add('nest');
+  cells[foodPosition].classList.add('food');
 
-  state.ants = [];
-  state.ants.push(new Ant(state), new Ant(state));
+  ants.push(new Ant(state), new Ant(state));
 }
 
-function getCellNr(columns: number, rows: number) {
+export function getCellNr(columns: number, rows: number): number {
   return Math.floor(Math.random() * (columns * rows -1))
 }
