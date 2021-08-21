@@ -1,15 +1,18 @@
 export function changeScent(state: any, type: string) {
   const {
-    antPosition:currentAntPosition,
+    ants,
     scent: currentScents
   } = state;
 
   let nextScent
   switch(type) {
     case 'MARK':
-      const scent = currentScents.get(currentAntPosition) || 0;
-      nextScent = notHigher(scent + 15, 100);
-      applyScent(state, currentAntPosition, nextScent)
+      ants.forEach((ant: any) => {
+        const scent = currentScents.get(ant.position) || 0;
+        nextScent = notHigher(scent + 15, 100);
+        applyScent(state, ant.position, nextScent)
+      })
+
       break;
     case 'FADE':
       currentScents.forEach((scent: number, position: number) => {

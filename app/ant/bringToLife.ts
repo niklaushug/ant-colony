@@ -1,7 +1,5 @@
 // @ts-ignore
 import {changeScent} from './scent.ts';
-// @ts-ignore
-import {move} from './move.ts';
 
 export function bringToLife(state: any) {
   const {
@@ -10,7 +8,7 @@ export function bringToLife(state: any) {
   } = state.world;
 
   const lifetimeTick = (state: any) => {
-    move(state);
+    state.ants.forEach((ant: any) => ant.move(state));
     changeScent(state, 'MARK');
     changeScent(state, 'FADE');
   }
@@ -23,7 +21,6 @@ export function bringToLife(state: any) {
 
   window.setTimeout(
     () => {
-      // console.log(state: any);
       window.clearInterval(lifetimelInterval);
     },
     lifetimeMs

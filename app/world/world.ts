@@ -1,5 +1,7 @@
 // @ts-ignore
-import {changeScent} from '../ant/scent.ts'
+import {changeScent} from '../ant/scent.ts';
+// @ts-ignore
+import {Ant} from '../ant/ant.ts';
 
 export function setUpWorld(state: any) {
   const {
@@ -28,17 +30,14 @@ export function populateWorld(state: any) {
     rows
   } = state.world;
 
-  const nestPosition = getCellNr(columns, rows);
-  const foodPosition = getCellNr(columns, rows);
-
-  state.foodPosition = foodPosition;
-  state.antPosition = nestPosition;  // TODO let many ants crawl
+  const nestPosition = state.nestPosition = getCellNr(columns, rows);
+  const foodPosition = state.foodPosition = getCellNr(columns, rows);
 
   state.cellRefs[nestPosition].classList.add('nest');
-  state.cellRefs[nestPosition].classList.add('ant');
   state.cellRefs[foodPosition].classList.add('food');
 
-  changeScent(state, 'MARK');
+  state.ants = [];
+  state.ants.push(new Ant(state), new Ant(state));
 }
 
 function getCellNr(columns: number, rows: number) {
