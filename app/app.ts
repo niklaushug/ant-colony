@@ -20,13 +20,18 @@ export interface StateI {
     world: HTMLElement | null
   }
   scent: Map<number, number>
+  log: {
+    ants: {
+      [key: number]: number[]
+    }
+  }
 }
 
 const config: ConfigI = {
-  columns: 8,
+  columns: 20,
   tickMs: 100,
   lifetimeMs: 4000,
-  rows: 8,
+  rows: 20,
 }
 
 const state: StateI = {
@@ -41,8 +46,14 @@ const state: StateI = {
     world: null,
   },
   scent: new Map(),
+  log: {
+    ants: {}
+  },
 }
 
 setUpWorld(state);
 populateWorld(state);
-bringToLife(state);
+window.setTimeout(() => {
+  bringToLife(state)
+},5000
+)

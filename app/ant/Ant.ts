@@ -7,12 +7,26 @@ type DirectionsI = typeof DIRECTIONS[number];
 
 export class Ant {
   private position: number;
+  private antNr: number;
 
   constructor(state: StateI) {
     this.position = state.nestPosition;
-    if (state.refs.cells) {
-      state.refs.cells[this.position].classList.add('ant')
-    }
+    const cells = state.refs.cells;
+
+    if (!cells) return;
+    cells[this.position].classList.add('ant')
+
+
+
+    // TODO create nice logger
+    const logAnts = state.log.ants;
+
+    if (!logAnts) return;
+
+    // TODO Bug: state.ants?.length is not reliable in constructor. this.antNr is always 0
+    this.antNr = state.ants?.length || 0;
+    logAnts[this.antNr] = []
+    logAnts[this.antNr].push(this.position)
   }
 
   move(state: StateI) {

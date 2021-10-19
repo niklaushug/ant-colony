@@ -42,7 +42,7 @@ export function populateWorld(state: StateI) {
   cells[nestPosition].classList.add('nest');
   cells[foodPosition].classList.add('food');
 
-  ants.push(new Ant(state), new Ant(state));
+  ants.push(new Ant(state), new Ant(state), new Ant(state));
 }
 
 export function getCellNr(columns: number, rows: number): number {
